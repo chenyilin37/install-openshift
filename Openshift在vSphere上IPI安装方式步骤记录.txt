@@ -1,12 +1,20 @@
-﻿一、设置主机名、关闭防火墙及selinux
-hostnamectl set-hostname bastion.ocp4.wise2c.com
+﻿设置环境变量
+
+export BASE_DOMAIN=wise2c.com
+export CLUSTER_NAME=ocp4
+
+
+一、设置主机名、关闭防火墙及selinux
+hostnamectl set-hostname bastion.$CLUSTER_NAM.$BASE_DOMAIN
+
 vi /etc/selinux/config
+将SELINUX的值设置为disabled。重启生效
+
 firewall-cmd --set-default-zone=trusted
 
 二、安装解压工具、dhcp服务包、dns服务包及docker
-yum install unzip dhcp bind bind-utils net-tools
+yum install -y yum-utils unzip dhcp bind bind-utils net-tools
 
-yum install -y yum-utils
 yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 yum install docker-ce docker-ce-cli containerd.io
 systemctl enable docker
